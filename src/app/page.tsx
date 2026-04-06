@@ -1,24 +1,66 @@
-import Link from "next/link";
-import Button from "@/components/ui/Button";
+﻿import { profile } from "@/config/profile";
+import { readSiteData } from "@/lib/siteData";
+import BentoLinks from "@/components/profile/BentoLinks";
+import { Showcase } from "@/components/ui/showcase";
+import BackgroundSlideshow from "@/components/profile/BackgroundSlideshow";
+import LustreText from "@/components/ui/lustretext";
+
+// 배경 이미지 배열
+const BACKGROUND_IMAGES = [
+  "/uploads/mainslide01.png",
+  "/uploads/mainslide02.png",
+  "/uploads/mainslide03.png",
+  "/uploads/mainslide04_01.png",
+];
 
 export default function HomePage() {
+  const data = readSiteData();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-indigo-50 to-white px-4 dark:from-gray-900 dark:to-gray-950">
-      <div className="text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-          Link in Bio
-        </h1>
-        <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-          One link to share everything.
-        </p>
-        <div className="mt-8 flex items-center justify-center gap-4">
-          <Link href="/register">
-            <Button size="lg">Get started</Button>
-          </Link>
-          <Link href="/login">
-            <Button size="lg" variant="secondary">Sign in</Button>
-          </Link>
+    <main className="relative min-h-screen bg-[#111111] text-white overflow-x-hidden">
+      {/* 배경 슬라이더 (Swiper - EffectFade) */}
+      {profile.showImage && (
+        <BackgroundSlideshow images={BACKGROUND_IMAGES} />
+      )}
+
+      {/* 컨텐츠 영역: 상단 pt-[500px]에서 배경을 터치할 수 있게 pointer-events 처리 */}
+      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-[500px] pb-16 space-y-10 pointer-events-none">
+        <div className="flex flex-col items-center gap-4 text-center pointer-events-auto">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-black text-white drop-shadow-lg">
+              <LustreText text={profile.name} className="text-4xl" />
+            </h1>
+            <p className="text-sm font-bold text-gray-400 bg-black/40 backdrop-blur-md inline-block px-3 py-1 rounded-full border border-white/10">
+              {profile.username}
+            </p>
+          </div>
+          
+          <LustreText 
+            words={["Next.js 개발자", "콘텐츠 크리에이터", "프리랜서 디자이너"]} 
+            className="text-xl font-bold"
+            duration={3}
+            pauseDuration={2500}
+          />
+
+          {profile.bio && (
+            <p className="text-sm leading-relaxed text-gray-300 max-w-xs font-medium bg-black/30 backdrop-blur-sm p-3 rounded-xl border border-white/5">
+              {profile.bio}
+            </p>
+          )}
         </div>
+
+        <div className="pointer-events-auto">
+          <BentoLinks links={data.links} />
+        </div>
+
+        {data.showcase.length > 0 && (
+          <div className="pt-4 pointer-events-auto">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-gray-400">
+              Featured
+            </p>
+            <Showcase items={data.showcase} mediaClass="h-64 md:h-auto" />
+          </div>
+        )}
       </div>
     </main>
   );
