@@ -22,7 +22,7 @@ const PLATFORMS: Platform[] = [
   "facebook", "linkedin", "github", "custom",
 ];
 
-/* ── 썸네일 업로드 버튼 ── */
+/* 썸네일 업로드 컴포넌트 */
 function ThumbnailUpload({
   current,
   onUploaded,
@@ -57,7 +57,7 @@ function ThumbnailUpload({
         className="flex items-center gap-1.5 rounded-lg border border-dashed border-gray-300 px-3 py-1.5 text-xs text-gray-500 hover:border-indigo-400 hover:text-indigo-600 disabled:opacity-50"
       >
         {loading ? "업로드 중..." : (
-          <><ImagePlus className="h-3.5 w-3.5" /> {current ? "변경" : "이미지 추가"}</>
+          <><ImagePlus className="h-3.5 w-3.5" /> {current ? "변경" : "썸네일 추가"}</>
         )}
       </button>
       <input
@@ -71,7 +71,7 @@ function ThumbnailUpload({
   );
 }
 
-/* ── 개별 링크 행 ── */
+/* 링크 개별 행 컴포넌트 */
 function LinkRow({
   link,
   onDelete,
@@ -88,7 +88,7 @@ function LinkRow({
   const [thumbnail, setThumbnail] = useState(link.thumbnail ?? "");
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id });
-  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };
+  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };    
 
   const handleSave = () => {
     onSave(link.id, { label, url, platform, thumbnail: thumbnail || undefined });
@@ -112,10 +112,10 @@ function LinkRow({
           >
             {PLATFORMS.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
-          <Input placeholder="라벨" value={label} onChange={(e) => setLabel(e.target.value)} />
+          <Input placeholder="이름" value={label} onChange={(e) => setLabel(e.target.value)} />
           <Input placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} />
           <div>
-            <p className="mb-1.5 text-xs font-medium text-gray-500">카드 배경 이미지</p>
+            <p className="mb-1.5 text-xs font-medium text-gray-500">썸네일 이미지</p>
             <ThumbnailUpload
               current={thumbnail}
               onUploaded={(u) => setThumbnail(u)}
@@ -158,7 +158,7 @@ function LinkRow({
   );
 }
 
-/* ── 새 링크 추가 폼 ── */
+/* 링크 추가 폼 컴포넌트 */
 function AddLinkForm({ onAdd }: { onAdd: (data: Omit<SiteLink, "id">) => void }) {
   const [open, setOpen] = useState(false);
   const [platform, setPlatform] = useState<Platform>("instagram");
@@ -187,10 +187,10 @@ function AddLinkForm({ onAdd }: { onAdd: (data: Omit<SiteLink, "id">) => void })
       >
         {PLATFORMS.map((p) => <option key={p} value={p}>{p}</option>)}
       </select>
-      <Input placeholder="라벨 (예: Instagram)" value={label} onChange={(e) => setLabel(e.target.value)} />
+      <Input placeholder="라벨 (예: Instagram)" value={label} onChange={(e) => setLabel(e.target.value)} />     
       <Input placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} />
       <div>
-        <p className="mb-1.5 text-xs font-medium text-gray-500">카드 배경 이미지 (선택)</p>
+        <p className="mb-1.5 text-xs font-medium text-gray-500">썸네일 이미지 (선택)</p>
         <ThumbnailUpload current={thumbnail} onUploaded={setThumbnail} />
       </div>
       <div className="flex gap-2 justify-end">
@@ -201,7 +201,7 @@ function AddLinkForm({ onAdd }: { onAdd: (data: Omit<SiteLink, "id">) => void })
   );
 }
 
-/* ── 메인 컴포넌트 ── */
+/* 링크 목록 관리 컴포넌트 */
 export default function AdminLinkList({ initialLinks }: { initialLinks: SiteLink[] }) {
   const [links, setLinks] = useState(initialLinks);
 
@@ -238,12 +238,12 @@ export default function AdminLinkList({ initialLinks }: { initialLinks: SiteLink
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, ...data } : l)));
+    setLinks((prev) => prev.map((l: SiteLink) => (l.id === id ? { ...l, ...data } : l)));
   };
 
   const handleDelete = async (id: string) => {
     await fetch(`/api/admin/links/${id}`, { method: "DELETE" });
-    setLinks((prev) => prev.filter((l) => l.id !== id));
+    setLinks((prev) => prev.filter((l: SiteLink) => l.id !== id));
   };
 
   return (
@@ -253,8 +253,8 @@ export default function AdminLinkList({ initialLinks }: { initialLinks: SiteLink
       </CardHeader>
       <div className="space-y-3">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
-            {links.map((link) => (
+          <SortableContext items={links.map((l: SiteLink) => l.id)} strategy={verticalListSortingStrategy}>
+            {links.map((link: SiteLink) => (
               <LinkRow key={link.id} link={link} onDelete={handleDelete} onSave={handleSave} />
             ))}
           </SortableContext>

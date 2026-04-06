@@ -26,7 +26,7 @@ const itemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
-/* mix: false — 이미지 위 / 텍스트 아래 분리 */
+/* SeparatedCard 컴포넌트 */
 function SeparatedCard({ link }: { link: SiteLink }) {
   const img = link.thumbnail ?? platformLogo[link.platform];
   return (
@@ -45,7 +45,7 @@ function SeparatedCard({ link }: { link: SiteLink }) {
   );
 }
 
-/* mix: true — 이미지 위에 텍스트 겹침 */
+/* MergedCard 컴포넌트 */
 function MergedCard({ link }: { link: SiteLink }) {
   const img = link.thumbnail ?? platformLogo[link.platform];
   const minH = link.compact ? 'min-h-[5rem]' : 'min-h-[16rem]';
@@ -56,7 +56,7 @@ function MergedCard({ link }: { link: SiteLink }) {
       ) : (
         <div className="absolute inset-0 bg-gray-100" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />        
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
         <p className="font-semibold text-white drop-shadow text-sm">{link.label}</p>
       </div>
@@ -74,7 +74,7 @@ export default function BentoLinks({ links }: BentoLinksProps) {
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <BentoGrid>
-        {links.map((link, i) => (
+        {links.map((link: SiteLink, i: number) => (
           <motion.div
             key={link.id}
             variants={itemVariants}
@@ -82,13 +82,13 @@ export default function BentoLinks({ links }: BentoLinksProps) {
             animate={{
               scale:   hoveredIndex === null ? 1 : hoveredIndex === i ? 1 : 0.97,
               opacity: hoveredIndex === null ? 1 : hoveredIndex === i ? 1 : 0.5,
-              filter:  hoveredIndex === null ? 'blur(0px)' : hoveredIndex === i ? 'blur(0px)' : 'blur(1.5px)',
+              filter:  hoveredIndex === null ? 'blur(0px)' : hoveredIndex === i ? 'blur(0px)' : 'blur(1.5px)',  
             }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             onHoverStart={() => setHoveredIndex(i)}
             onHoverEnd={() => setHoveredIndex(null)}
           >
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">       
               {link.mix ? (
                 <MergedCard link={link} />
               ) : (

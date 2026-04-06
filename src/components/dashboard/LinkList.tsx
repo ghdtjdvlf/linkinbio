@@ -49,7 +49,7 @@ export default function LinkList({ initialLinks }: LinkListProps) {
     await fetch("/api/links/reorder", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids: reordered.map((l) => l.id) }),
+      body: JSON.stringify({ ids: reordered.map((l: LinkItem) => l.id) }),
     });
   };
 
@@ -72,13 +72,13 @@ export default function LinkList({ initialLinks }: LinkListProps) {
       body: JSON.stringify(data),
     });
     const updated = await res.json();
-    setLinks((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+    setLinks((prev) => prev.map((l: LinkItem) => (l.id === updated.id ? updated : l)));
     setEditingLink(null);
   };
 
   const handleDelete = async (id: string) => {
     await fetch(`/api/links/${id}`, { method: "DELETE" });
-    setLinks((prev) => prev.filter((l) => l.id !== id));
+    setLinks((prev) => prev.filter((l: LinkItem) => l.id !== id));
   };
 
   const handleToggleActive = async (id: string, active: boolean) => {
@@ -87,7 +87,7 @@ export default function LinkList({ initialLinks }: LinkListProps) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ active }),
     });
-    setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, active } : l)));
+    setLinks((prev) => prev.map((l: LinkItem) => (l.id === id ? { ...l, active } : l)));
   };
 
   return (
@@ -116,9 +116,9 @@ export default function LinkList({ initialLinks }: LinkListProps) {
         </p>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext items={links.map((l: LinkItem) => l.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-3">
-              {links.map((link) => (
+              {links.map((link: LinkItem) => (
                 <LinkCard
                   key={link.id}
                   link={link}
