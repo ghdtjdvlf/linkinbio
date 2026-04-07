@@ -10,7 +10,6 @@ const BACKGROUND_SLIDES = [
   "/uploads/video/video (1).mp4",
   "/uploads/video/video (2).mp4",
   "/uploads/video/video (3).mp4",
-  "/uploads/video/video (4).mp4",
   // "/uploads/bg_video.mp4",  ← 비디오 추가 예시
 ];
 

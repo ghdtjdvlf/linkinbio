@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade, Autoplay, Pagination } from 'swiper/modules';
@@ -18,19 +18,14 @@ function isVideo(src: string): boolean {
   return /\.(mp4|webm|mov|ogg)$/i.test(src);
 }
 
-function VideoSlide({ src, active }: { src: string; active: boolean }) {
+function VideoSlide({ src }: { src: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    if (active) {
-      el.currentTime = 0;
-      el.play().catch(() => {});
-    } else {
-      el.pause();
-    }
-  }, [active]);
+    el.play().catch(() => {});
+  }, []);
 
   return (
     <video
@@ -46,7 +41,6 @@ function VideoSlide({ src, active }: { src: string; active: boolean }) {
 
 export default function BackgroundSlideshow({ slides }: BackgroundSlideshowProps) {
   const swiperRef = useRef<SwiperType | null>(null);
-  const [activeIndex, setActiveIndex] = React.useState(0);
 
   if (!slides || slides.length === 0) return null;
 
@@ -65,12 +59,11 @@ export default function BackgroundSlideshow({ slides }: BackgroundSlideshowProps
         modules={[EffectFade, Autoplay, Pagination]}
         className="w-full h-full"
         onSwiper={(swiper) => { swiperRef.current = swiper; }}
-        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {slides.map((src, index) => (
           <SwiperSlide key={index} className="relative w-full h-full">
             {isVideo(src) ? (
-              <VideoSlide src={src} active={activeIndex === index} />
+              <VideoSlide src={src} />
             ) : (
               <Image
                 src={src}
