@@ -1,17 +1,16 @@
-import fs from "fs";
-import path from "path";
 import { type Platform } from "@/config/profile";
+import siteJson from "@/data/site.json";
 
 export interface SiteLink {
   id: string;
   platform: Platform;
   label: string;
   url: string;
-  thumbnail?: string;   // 카드 배경 이미지
-  showImage?: boolean;  // false면 이미지 영역 숨김 (기본 true)
-  mix?: boolean;        // true면 텍스트 겹침, false면 분리
-  span?: number;        // 그리드 칸 수 (1~6, 기본 자동)
-  compact?: boolean;    // true면 낮은 높이
+  thumbnail?: string;
+  showImage?: boolean;
+  mix?: boolean;
+  span?: number;
+  compact?: boolean;
 }
 
 export interface ShowcaseItem {
@@ -28,13 +27,6 @@ export interface SiteData {
   showcase: ShowcaseItem[];
 }
 
-const filePath = path.join(process.cwd(), "src/data/site.json");
-
 export function readSiteData(): SiteData {
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw) as SiteData;
-}
-
-export function writeSiteData(data: SiteData) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  return siteJson as SiteData;
 }
