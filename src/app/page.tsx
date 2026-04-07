@@ -5,12 +5,13 @@ import { Showcase } from "@/components/ui/showcase";
 import BackgroundSlideshow from "@/components/profile/BackgroundSlideshow";
 import LustreText from "@/components/ui/lustretext";
 
-// 배경 이미지 배열
-const BACKGROUND_IMAGES = [
-  "/uploads/mainslide01.png",
-  "/uploads/mainslide02.png",
-  "/uploads/mainslide03.png",
-  "/uploads/mainslide04_01.png",
+// 배경 슬라이드 배열 — 이미지(.png/.jpg)와 비디오(.mp4/.webm) 혼합 가능
+const BACKGROUND_SLIDES = [
+  "/uploads/video/video (1).mp4",
+  "/uploads/video/video (2).mp4",
+  "/uploads/video/video (3).mp4",
+  "/uploads/video/video (4).mp4",
+  // "/uploads/bg_video.mp4",  ← 비디오 추가 예시
 ];
 
 export default function HomePage() {
@@ -20,7 +21,7 @@ export default function HomePage() {
     <main className="relative min-h-screen bg-[#111111] text-white overflow-x-hidden">
       {/* 배경 슬라이더 (Swiper - EffectFade) */}
       {profile.showImage && (
-        <BackgroundSlideshow images={BACKGROUND_IMAGES} />
+        <BackgroundSlideshow slides={BACKGROUND_SLIDES} />
       )}
 
       {/* 컨텐츠 영역: 상단 pt-[500px]에서 배경을 터치할 수 있게 pointer-events 처리 */}

@@ -1,5 +1,5 @@
 export const profile = {
-  name: "Lia Kim",
+  name: "Ria Kim",
   username: "@myhandle",
   bio: "한 줄 소개를 여기에 적어주세요 ✨",
   image: "/uploads/main.png",  // public/profile.jpg
