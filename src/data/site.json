@@ -6,8 +6,8 @@
     { "id": "3", "platform": "instagram", "label": "Instagram",           "url": "https://instagram.com/yourhandle","mix": true,  "thumbnail": "/uploads/instalogo.png",  "span": 3, "compact": true }
   ],
   "showcase": [
-    { "id": "s1", "heading": "Latest Video",       "description": "Check out my latest content.",       "media": "/uploads/main.png",                                                          "link": "" },
-    { "id": "s2", "heading": "Behind the scenes",  "description": "A glimpse into my creative process.", "media": "https://images.pexels.com/photos/28853379/pexels-photo-28853379.jpeg",       "link": "" },
-    { "id": "s3", "heading": "Recent work",         "description": "My most recent project.",             "media": "https://images.pexels.com/photos/3426870/pexels-photo-3426870.jpeg",        "link": "" }
+    { "id": "s1", "heading": "Latest Video",       "description": "Check out my latest content.",       "media": "/uploads/mainslide01.png",                                                          "link": "" },
+    { "id": "s2", "heading": "Behind the scenes",  "description": "A glimpse into my creative process.", "media": "/uploads/mainslide02.png",       "link": "" },
+    { "id": "s3", "heading": "Recent work",         "description": "My most recent project.",             "media": "/uploads/mainslide03.png",        "link": "" }
   ]
 }

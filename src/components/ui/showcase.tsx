@@ -79,7 +79,7 @@ function Showcase({
               </a>
             ) : (
               <>
-                <h3 className='text-base md:text-lg font-semibold leading-none text-gray-900'>
+                <h3 className='text-base md:text-lg font-semibold leading-none text-gray-300'>
                   {item.heading}
                 </h3>
                 <p className='mt-2 text-sm text-gray-400'>{item.description}</p>

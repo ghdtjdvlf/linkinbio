@@ -7,9 +7,9 @@ import LustreText from "@/components/ui/lustretext";
 
 // 배경 슬라이드 배열 — 이미지(.png/.jpg)와 비디오(.mp4/.webm) 혼합 가능
 const BACKGROUND_SLIDES = [
-  "/uploads/video/video (1).mp4",
+  "/uploads/video/0407.mp4",
   "/uploads/video/video (2).mp4",
-  "/uploads/video/video (3).mp4",
+  "/uploads/video/video (1).mp4", 
   // "/uploads/bg_video.mp4",  ← 비디오 추가 예시
 ];
 

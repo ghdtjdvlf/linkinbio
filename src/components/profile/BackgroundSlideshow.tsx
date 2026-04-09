@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectFade, Autoplay, Pagination } from 'swiper/modules';
+import { EffectFade, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
@@ -11,20 +11,35 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 
 interface BackgroundSlideshowProps {
-  slides: string[]; // 이미지 또는 비디오 경로 혼합 가능
+  slides: string[];
 }
 
 function isVideo(src: string): boolean {
   return /\.(mp4|webm|mov|ogg)$/i.test(src);
 }
 
-function VideoSlide({ src }: { src: string }) {
+function VideoSlide({ src, active, onEnded }: { src: string; active: boolean; onEnded: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const onEndedRef = useRef(onEnded);
+  useEffect(() => { onEndedRef.current = onEnded; }, [onEnded]);
 
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    el.play().catch(() => {});
+    if (active) {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [active]);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const handleEnded = () => onEndedRef.current();
+    el.addEventListener('ended', handleEnded);
+    return () => el.removeEventListener('ended', handleEnded);
   }, []);
 
   return (
@@ -32,7 +47,6 @@ function VideoSlide({ src }: { src: string }) {
       ref={videoRef}
       src={src}
       muted
-      loop
       playsInline
       className="absolute inset-0 w-full h-full object-cover"
     />
@@ -41,6 +55,11 @@ function VideoSlide({ src }: { src: string }) {
 
 export default function BackgroundSlideshow({ slides }: BackgroundSlideshowProps) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleVideoEnded = useCallback(() => {
+    swiperRef.current?.slideNext();
+  }, []);
 
   if (!slides || slides.length === 0) return null;
 
@@ -51,19 +70,16 @@ export default function BackgroundSlideshow({ slides }: BackgroundSlideshowProps
         effect="fade"
         fadeEffect={{ crossFade: true }}
         loop={true}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
         pagination={{ clickable: true }}
-        modules={[EffectFade, Autoplay, Pagination]}
+        modules={[EffectFade, Pagination]}
         className="w-full h-full"
         onSwiper={(swiper) => { swiperRef.current = swiper; }}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {slides.map((src, index) => (
           <SwiperSlide key={index} className="relative w-full h-full">
             {isVideo(src) ? (
-              <VideoSlide src={src} />
+              <VideoSlide src={src} active={activeIndex === index} onEnded={handleVideoEnded} />
             ) : (
               <Image
                 src={src}
